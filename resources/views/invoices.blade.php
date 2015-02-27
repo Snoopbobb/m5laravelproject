@@ -1,7 +1,6 @@
 @extends('layout')
 
 
-
 @section('main_content')
 <h2>Invoices</h2>
 <table border="1px solid black">

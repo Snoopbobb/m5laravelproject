@@ -3,7 +3,8 @@
 
 
 @section('main_content')
-<form>
+<form method="POST" action="/customer/update/{{ $customer->id }}">
+	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<label>First Name:</label>
 	<input name="first_name" value=" {{ $customer->first_name }}" type="text"></input>
 	<label>Last Name:</label>
@@ -14,6 +15,6 @@
 		<option>Male</option>
 		<option>Female</option>
 	</select>
-	<button>Submit</button>
+	<button>Update</button>
 </form>
 @endsection

@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
-
 use DB;
+use Request;
 
 class InvoiceController extends Controller {
 
@@ -30,20 +30,61 @@ class InvoiceController extends Controller {
 			Group by t.invoice_id";
 
 		$invoices = DB::select($sql);
+
 		return view('invoices', ["invoices" => $invoices]);
 	}
 
 	public function getInvoiceDetails($id){
 		$sql = "
-			SELECT quantity, i.name, price, (price * quantity) AS subtotal, t.invoice_id, t.item_id, c.first_name, c.last_name
+			SELECT quantity, i.name, price, (price * quantity) AS subtotal, t.invoice_id AS invoice_id, 
+				   t.item_id, c.first_name AS first_name, c.last_name AS last_name
 			FROM invoice_item AS t, invoice AS v, item AS i, customer as c
 			WHERE v.id = t.invoice_id
 			AND i.id = t.item_id
 			AND c.id = v.customer_id
-			AND v.id = :id";	
+			AND v.id = :id";
 
-		$invoices = DB::select($sql, ["id" => $id]);
-		return view('invoicedetails', ["invoices" => $invoices]);
+		$sql2 = "SELECT item.name, item.id  
+				FROM item";	
+
+		$sql3 = "SELECT first_name, last_name
+				FROM customer
+				WHERE customer.id = :id";
+
+		$invoice_items = DB::select($sql, ["id" => $id]);
+		$items = DB::select($sql2);
+		$customers = DB::select($sql3, ["id" => $id]);
+		foreach ($customers as $customer) {
+			$first_name = $customer->first_name;
+			$last_name = $customer->last_name;
+		}
+		return view('invoicedetails', ["invoice_items" => $invoice_items, 
+										"items" => $items, 
+										"invoice_id" => $id,
+										"first_name" => $first_name,
+										"last_name" => $last_name]
+										);
+	}
+
+	public function add($invoice_id){
+		$sql = "
+			INSERT INTO invoice_item (
+				invoice_id, item_id, quantity
+			) VALUES (
+				:invoice_id, :item_id, :quantity
+			)
+			ON DUPLICATE KEY UPDATE
+			quantity = :quantity2
+			";
+		
+		
+		$quantity = Request::input('quantity');
+		$quantity2 = Request::input('quantity');
+		$item_id = Request::input('item_id');
+
+		DB::select($sql, ["invoice_id" => $invoice_id, "item_id" => $item_id, "quantity" => $quantity, "quantity2" => $quantity2]);
+
+		return redirect("invoice/$invoice_id");
 	}
 
 	public function delete($invoice_id, $item_id){

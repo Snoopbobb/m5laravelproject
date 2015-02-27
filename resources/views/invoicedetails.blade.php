@@ -2,28 +2,31 @@
 
 
 @section('main_content')
-	<h2>Invoice: {{$invoices[0]->invoice_id}} Customer: {{ ucwords($invoices[0]->first_name) }} {{ ucwords($invoices[0]->last_name) }}</h2>
+	<h2>Invoice: {{$invoice_id}} Customer: {{ ucwords($first_name) }} {{ ucwords($last_name) }}</h2>
 	<table border="1px solid black">
 		<th>Quantity</th>
 		<th>Name</th>
 		<th>Price</th>
 		<th>Sub Total</th>
-		@foreach($invoices as $invoice) 
+		@foreach($invoice_items as $detail) 
 		<tr>
-			<td>{{ $invoice->quantity }}</td>
-			<td>{{ $invoice->name }}</td>
-			<td>{{ $invoice->price }}</td>
-			<td>{{ $invoice->subtotal }}</td>
-			<td><a href="{{$invoice->invoice_id}}/{{$invoice->item_id}}/delete">Remove</a></td>
+			<td>{{ $detail->quantity }}</td>
+			<td>{{ $detail->name }}</td>
+			<td>{{ $detail->price }}</td>
+			<td>{{ $detail->subtotal }}</td>
+			<td><a href="{{$invoice_id}}/{{$detail->item_id}}/delete">Remove</a></td>
 		</tr>
-		@endforeach 
+		@endforeach
 	</table>
 	<a href="/invoice/all">Back To Invoices</a>
-	<form>
+	<form method="POST" action="/invoice/{{ $invoice_id }}/add">
 		<label>Quantity</label>
+		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<input type="text" name="quantity" >
-		<select>
-			<option>Items</option>
+		<select name="item_id">
+			@foreach($items as $item)
+			<option value="{{ $item->id }}">{{ $item->name }}</option>
+			@endforeach
 		</select>
 		<button>Add</button>
 	</form>

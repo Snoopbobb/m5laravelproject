@@ -13,8 +13,8 @@
 			<td>{{ $customer->last_name }}</td>
 			<td>{{ $customer->email }}</td>
 			<td>{{ $customer->gender }}</td>
-			<td><a href="#">New Invoice</a></td>
-			<td><a href="customer/edit/{{ $customer->id }}" >Edit</a></td>
+			<td><a href="invoice/{{ $customer->id }}">New Invoice</a></td>
+			<td><a href="{{ $customer->id }}/edit" >Edit</a></td>
 		</tr>
 	</table>
 @endsection
