@@ -32,7 +32,9 @@ Route::get('item/add', 'ItemController@add');
 
 Route::get('invoice/all', 'InvoiceController@all');
 
-Route::get('invoice/{id}', 'InvoiceController@getInvoiceDetails');
+Route::get('invoice/new/{id}', 'InvoiceController@newInvoice');
+
+Route::get('invoice/{invoice_id}', 'InvoiceController@getInvoiceDetails');
 
 Route::get('invoice/{invoice_id}/{item_id}/delete', 'InvoiceController@delete');
 

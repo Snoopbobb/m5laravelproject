@@ -76,27 +76,12 @@ class CustomerController extends Controller {
 			)
 		";
 
-		$sql2 = "
-			INSERT INTO invoice (
-				customer_id, created_at
-			) VALUES (
-				:customer_id, CURDATE()
-			)
-		";
-
 		DB::insert($sql, [
 			'first_name' => $first_name,
 			'last_name' => $last_name,
 			'email' => $email,
 			'gender' => $gender,
 			]);
-
-		// $customer_id = 
-
-
-		DB::insert($sql2, [
-			':customer_id' => DB::getPdo()->lastInsertId()
-		]);
 
 		return redirect('customer/all');
 	}

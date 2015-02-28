@@ -2,7 +2,7 @@
 
 
 @section('main_content')
-	<h2>Invoice: {{$invoice_id}} Customer: {{ ucwords($first_name) }} {{ ucwords($last_name) }}</h2>
+	<h2>Invoice: {{$invoice_id}} </h2>
 	<table border="1px solid black">
 		<th>Quantity</th>
 		<th>Name</th>

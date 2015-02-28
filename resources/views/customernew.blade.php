@@ -12,8 +12,8 @@
 	<label>Email:</label>
 	<input name="email" type="email"></input>
 	<select name="gender">
-		<option>Male</option>
-		<option>Female</option>
+		<option>male</option>
+		<option>female</option>
 	</select>
 	<button>Add</button>
 </form>

@@ -47,23 +47,39 @@ class InvoiceController extends Controller {
 		$sql2 = "SELECT item.name, item.id  
 				FROM item";	
 
-		$sql3 = "SELECT first_name, last_name
-				FROM customer
-				WHERE customer.id = :id";
+		// $sql3 = "SELECT first_name, last_name
+		// 		FROM customer
+		// 		WHERE customer.id = :id";
 
 		$invoice_items = DB::select($sql, ["id" => $id]);
 		$items = DB::select($sql2);
-		$customers = DB::select($sql3, ["id" => $id]);
-		foreach ($customers as $customer) {
-			$first_name = $customer->first_name;
-			$last_name = $customer->last_name;
-		}
+		// $customers = DB::select($sql3, ["id" => $id]);
+		// foreach ($customers as $customer) {
+		// 	$first_name = $customer->first_name;
+		// 	$last_name = $customer->last_name;
+		// }
 		return view('invoicedetails', ["invoice_items" => $invoice_items, 
 										"items" => $items, 
-										"invoice_id" => $id,
-										"first_name" => $first_name,
-										"last_name" => $last_name]
+										"invoice_id" => $id]
+										// "first_name" => $first_name,
+										// "last_name" => $last_name]
 										);
+	}
+
+	public function newInvoice($customer_id){
+		$sql = "
+			INSERT INTO invoice (
+				customer_id, created_at
+			) VALUES (
+				:customer_id, CURDATE()
+			)
+		";
+
+		DB::insert($sql, [
+			':customer_id' => $customer_id
+		]);
+
+		return redirect("invoice/" . DB::getPdo()->lastInsertId());
 	}
 
 	public function add($invoice_id){
